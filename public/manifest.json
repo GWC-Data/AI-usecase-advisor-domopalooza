@@ -1,0 +1,99 @@
+{
+   "name": "support-request-workflow",
+   "version": "0.0.1",
+   "size": {
+      "width": 3,
+      "height": 3
+   },
+   "fileName": "manifest.json",
+   "datasetsMapping": [],
+   "id": "d1fb8a36-22c8-42a2-917e-d520eb62fd3a",
+   "proxyId": "0f4d477d-c364-428d-ae64-0caaefbdbeb2",
+   "workflowsMapping": [
+      {
+         "startName": "AI_Support_Request_Workflow",
+         "alias": "SupportRequestWorkflow",
+         "modelId": "0a8c907d-144b-4de3-9ba1-93541cd1e555",
+         "parameters": [
+            {
+               "name": "customerName",
+               "displayName": "customerName",
+               "subString": null,
+               "type": "text",
+               "visible": true,
+               "value": null,
+               "required": true,
+               "isList": false,
+               "children": [],
+               "nullable": false,
+               "entitySubType": null,
+               "aliasedName": "customerName"
+            },
+            {
+               "name": "devEmail",
+               "displayName": "devEmail",
+               "subString": null,
+               "type": "text",
+               "visible": true,
+               "value": null,
+               "required": true,
+               "isList": false,
+               "children": [],
+               "nullable": false,
+               "entitySubType": null,
+               "aliasedName": "devEmail"
+            },
+            {
+               "name": "email",
+               "displayName": "email",
+               "subString": null,
+               "type": "text",
+               "visible": true,
+               "value": null,
+               "required": true,
+               "isList": false,
+               "children": [],
+               "nullable": false,
+               "entitySubType": null,
+               "aliasedName": "email"
+            },
+            {
+               "name": "requestId",
+               "displayName": "requestId",
+               "subString": null,
+               "type": "text",
+               "visible": true,
+               "value": null,
+               "required": true,
+               "isList": false,
+               "children": [],
+               "nullable": false,
+               "entitySubType": null,
+               "aliasedName": "requestId"
+            },
+            {
+               "name": "usecase",
+               "displayName": "usecase",
+               "subString": null,
+               "type": "text",
+               "visible": true,
+               "value": null,
+               "required": true,
+               "isList": false,
+               "children": [],
+               "nullable": false,
+               "entitySubType": null,
+               "aliasedName": "useCase"
+            }
+         ],
+         "version": "1.0.0"
+      }
+   ],
+   "collectionsMapping": [
+      {
+         "id": "85cd8cf3-5ac1-44ed-ac21-d35744c9e195",
+         "name": "support_requests",
+         "syncEnabled": false
+      }
+   ]
+}
