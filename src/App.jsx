@@ -230,19 +230,19 @@ function App() {
     const newErrors = {};
 
     if (!customerName.trim()) {
-      newErrors.customerName = "Name is required";
+      newErrors.customerName = "Please enter your full name";
     }
 
     if (!email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = "Please enter your email address";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = "Enter a valid email address";
+      newErrors.email = "Please enter a valid email address";
     }
 
     if (!usecase.trim()) {
-      newErrors.usecase = "Issue description is required";
+      newErrors.usecase = "Please describe your use case";
     } else if (usecase.trim().length < 10) {
-      newErrors.usecase = "Describe the issue in at least 10 characters";
+      newErrors.usecase = "Please describe your use case in detail";
     }
 
     setErrors(newErrors);
