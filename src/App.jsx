@@ -388,7 +388,7 @@ function App() {
                 <img
                   src={gwcLogo}
                   alt="GWC"
-                  className="h-8 w-auto object-contain"
+                  className="w-[150px] md:w-[200px] object-contain"
                 />
               </div>
             </div>
@@ -397,7 +397,7 @@ function App() {
                 <img
                   src={domoLogo}
                   alt="DomoPalooza"
-                  className="h-7 w-auto object-contain"
+                  className="w-[150px] md:w-[200px] object-contain"
                 />
               </div>
             </div>
