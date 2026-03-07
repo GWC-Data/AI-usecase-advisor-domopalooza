@@ -1,139 +1,191 @@
 import React, { useState, useEffect } from "react";
-import {
-  startSupportWorkflow,
-  waitForWorkflowCompletion,
-  getSupportTicket,
-} from "./api/startWorkflow";
 import gwcLogo from "./assert/gwc-logo.png";
 import domoLogo from "./assert/domopalooza-logo.svg";
 import toast, { Toaster } from "react-hot-toast";
+import { submitSupportRequest } from "./api/supportApi";
 
-// Celebration Blast Component - GUARANTEED WORKING VERSION
-const CelebrationBlast = () => {
-  const [particles, setParticles] = useState([]);
+// ConfettiPartyPopper - Drop-in replacement for the existing component
+// Large dual-cannon blast from bottom-left and bottom-right corners of the popup
 
-  useEffect(() => {
-    // Create 200 small particles for dense burst effect
-    const newParticles = Array.from({ length: 200 }, (_, i) => {
-      // Determine if particle comes from bottom left or bottom right corner
-      const side = Math.random() > 0.5 ? "left" : "right";
+const ConfettiPartyPopper = () => {
+  const [confetti, setConfetti] = React.useState([]);
 
-      // Small size range (3-12px)
-      const size = Math.random() * 9 + 3; // 3-12px
+  React.useEffect(() => {
+    const colors = [
+      "#FFD700", "#FF6B6B", "#4ECDC4", "#FFE66D", "#FF8C42",
+      "#A06B9A", "#FFB347", "#5F9EA0", "#FF69B4", "#00CED1",
+      "#FF1493", "#32CD32", "#FF4500", "#9370DB", "#FFDAB9",
+      "#98FB98", "#FFB6C1", "#87CEEB", "#F0E68C", "#DDA0DD",
+      "#FFF44F", "#FF3CAC", "#00F5FF", "#ADFF2F", "#FF6EC7",
+    ];
 
-      // Random direction
-      const angle = Math.random() * Math.PI * 2;
-      const distance = Math.random() * 150 + 50; // 50-200px
+    // Generate 180 pieces per side = 360 total for a massive blast
+    const pieces = [];
 
-      // Calculate translation
-      const tx = Math.cos(angle) * distance;
-      const ty = -Math.abs(Math.sin(angle) * distance) - 20; // Always go upward
+    ["left", "right"].forEach((side) => {
+      for (let i = 0; i < 180; i++) {
+        // Shape variety: streamer, circle, square, triangle-ish
+        const shapeRoll = Math.random();
+        let width, height, borderRadius, isStreamer;
 
-      return {
-        id: i,
-        side,
-        // Position at bottom corners
-        left: side === "left" ? 0 : "100%",
-        bottom: 0,
-        size: `${size}px`,
-        color: [
-          "#FBBF24",
-          "#F97316",
-          "#1E3A8A",
-          "#3B82F6",
-          "#10B981",
-          "#EC4899",
-          "#8B5CF6",
-          "#EF4444",
-          "#F59E0B",
-          "#6366F1",
-          "#06B6D4",
-          "#84CC16",
-          "#D946EF",
-          "#F43F5E",
-          "#14B8A6",
-          "#A855F7",
-          "#F472B6",
-          "#60A5FA",
-          "#FBBF24",
-          "#F97316",
-          "#1E3A8A",
-          "#3B82F6",
-        ][Math.floor(Math.random() * 22)],
-        animationDuration: `${Math.random() * 1.5 + 0.8}s`, // 0.8-2.3 seconds
-        animationDelay: `${Math.random() * 0.2}s`,
-        rotation: Math.random() * 720,
-        tx: tx,
-        ty: ty,
-        shape: Math.random() > 0.5 ? "circle" : "square",
-        opacity: Math.random() * 0.4 + 0.6,
-      };
+        if (shapeRoll < 0.35) {
+          // Long streamers
+          width = `${Math.random() * 10 + 6}px`;
+          height = `${Math.random() * 5 + 2}px`;
+          borderRadius = "1px";
+          isStreamer = true;
+        } else if (shapeRoll < 0.6) {
+          // Circles
+          const s = Math.random() * 10 + 5;
+          width = `${s}px`;
+          height = `${s}px`;
+          borderRadius = "50%";
+          isStreamer = false;
+        } else if (shapeRoll < 0.8) {
+          // Squares
+          const s = Math.random() * 10 + 5;
+          width = `${s}px`;
+          height = `${s}px`;
+          borderRadius = "2px";
+          isStreamer = false;
+        } else {
+          // Wide flat pieces
+          width = `${Math.random() * 14 + 8}px`;
+          height = `${Math.random() * 6 + 3}px`;
+          borderRadius = "3px";
+          isStreamer = false;
+        }
+
+        // LEFT cannon: fires up and to the right (0° to 80°)
+        // RIGHT cannon: fires up and to the left (100° to 180°)
+        let angle;
+        if (side === "left") {
+          angle = (Math.random() * 85 + 15) * (Math.PI / 180); // 15°–100° from horizontal
+        } else {
+          angle = (Math.random() * 85 + 95) * (Math.PI / 180); // 95°–180°
+        }
+
+        const distance = Math.random() * 320 + 180; // 180–500px — LARGE blast radius
+
+        // tx/ty are the full travel distance
+        const tx = Math.cos(angle) * distance;
+        const ty = -Math.abs(Math.sin(angle) * distance); // always upward
+
+        pieces.push({
+          id: `${side}-${i}`,
+          side,
+          width,
+          height,
+          borderRadius,
+          isStreamer,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          duration: `${Math.random() * 1.4 + 1.1}s`,       // 1.1–2.5s
+          delay: `${Math.random() * 0.35}s`,                 // slight stagger
+          tx,
+          ty,
+          finalRotation: Math.random() * 900 + 360,         // 360–1260° spin
+          opacity: Math.random() * 0.3 + 0.7,
+        });
+      }
     });
 
-    setParticles(newParticles);
+    setConfetti(pieces);
 
-    // Remove particles after animation
-    const timer = setTimeout(() => {
-      setParticles([]);
-    }, 2500);
-
+    const timer = setTimeout(() => setConfetti([]), 3200);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div
-      className="absolute inset-0 pointer-events-none overflow-visible"
-      style={{ zIndex: 9999 }}>
-      <style>
-        {`
-          @keyframes blastAnimation {
-            0% {
-              transform: scale(0) rotate(0deg) translate(0, 0);
-              opacity: 1;
-            }
-            20% {
-              transform: scale(1.3) rotate(180deg) translate(var(--tx, 50px), var(--ty, -50px));
-              opacity: 1;
-            }
-            40% {
-              transform: scale(1.1) rotate(270deg) translate(calc(var(--tx, 50px) * 1.5), calc(var(--ty, -50px) * 1.3));
-              opacity: 0.9;
-            }
-            60% {
-              transform: scale(0.9) rotate(360deg) translate(calc(var(--tx, 50px) * 1.8), calc(var(--ty, -50px) * 1.6));
-              opacity: 0.7;
-            }
-            80% {
-              transform: scale(0.6) rotate(450deg) translate(calc(var(--tx, 50px) * 2), calc(var(--ty, -50px) * 1.9));
-              opacity: 0.4;
-            }
-            100% {
-              transform: scale(0) rotate(540deg) translate(calc(var(--tx, 50px) * 2.2), calc(var(--ty, -50px) * 2.2));
-              opacity: 0;
-            }
+      style={{
+        position: "absolute",
+        inset: 0,
+        pointerEvents: "none",
+        overflow: "visible",
+        zIndex: 9999,
+      }}
+    >
+      <style>{`
+        @keyframes cwBlast {
+          0% {
+            transform: scale(0) rotate(0deg) translate(0px, 0px);
+            opacity: 1;
           }
-        `}
-      </style>
-      {particles.map((particle) => (
+          15% {
+            opacity: 1;
+          }
+          30% {
+            transform: scale(1.2) rotate(calc(var(--rot) * 0.3deg))
+              translate(calc(var(--tx) * 0.4px), calc(var(--ty) * 0.4px));
+            opacity: 1;
+          }
+          55% {
+            transform: scale(1.0) rotate(calc(var(--rot) * 0.6deg))
+              translate(calc(var(--tx) * 0.75px), calc(var(--ty) * 0.75px));
+            opacity: 0.85;
+          }
+          75% {
+            transform: scale(0.85) rotate(calc(var(--rot) * 0.82deg))
+              translate(calc(var(--tx) * 0.9px), calc(var(--ty) * 0.9px));
+            opacity: 0.55;
+          }
+          90% {
+            opacity: 0.25;
+          }
+          100% {
+            transform: scale(0.2) rotate(calc(var(--rot) * 1deg))
+              translate(calc(var(--tx) * 1px), calc(var(--ty) * 1px));
+            opacity: 0;
+          }
+        }
+
+        @keyframes cwBlastStreamer {
+          0% {
+            transform: scale(0) rotate(0deg) translate(0px, 0px);
+            opacity: 1;
+          }
+          25% {
+            transform: scale(1.3) rotate(calc(var(--rot) * 0.25deg))
+              translate(calc(var(--tx) * 0.35px), calc(var(--ty) * 0.35px));
+            opacity: 1;
+          }
+          60% {
+            transform: scaleX(1.8) scaleY(0.6) rotate(calc(var(--rot) * 0.65deg))
+              translate(calc(var(--tx) * 0.78px), calc(var(--ty) * 0.78px));
+            opacity: 0.8;
+          }
+          85% {
+            opacity: 0.4;
+          }
+          100% {
+            transform: scaleX(0.3) scaleY(0.3) rotate(calc(var(--rot) * 1deg))
+              translate(calc(var(--tx) * 1px), calc(var(--ty) * 1px));
+            opacity: 0;
+          }
+        }
+      `}</style>
+
+      {confetti.map((p) => (
         <div
-          key={particle.id}
-          className="absolute"
+          key={p.id}
           style={{
-            left: particle.left,
-            bottom: particle.bottom,
-            width: particle.size,
-            height: particle.size,
-            backgroundColor: particle.color,
-            animation: `blastAnimation ${particle.animationDuration} cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`,
-            animationDelay: particle.animationDelay,
-            borderRadius: particle.shape === "circle" ? "50%" : "2px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-            border: "none",
-            opacity: particle.opacity,
-            ["--tx"]: particle.tx + "px",
-            ["--ty"]: particle.ty + "px",
+            position: "absolute",
+            // Pin to the bottom corners
+            bottom: "0px",
+            left: p.side === "left" ? "0px" : undefined,
+            right: p.side === "right" ? "0px" : undefined,
+            width: p.width,
+            height: p.height,
+            backgroundColor: p.color,
+            borderRadius: p.borderRadius,
+            opacity: p.opacity,
+            boxShadow: `0 0 6px ${p.color}88`,
+            animation: `${p.isStreamer ? "cwBlastStreamer" : "cwBlast"} ${p.duration} cubic-bezier(0.22, 0.61, 0.36, 1) ${p.delay} forwards`,
+            // CSS custom properties for the keyframe math
+            "--tx": p.tx,
+            "--ty": p.ty,
+            "--rot": p.finalRotation,
             willChange: "transform, opacity",
-            transform: "translateZ(0)", // Force hardware acceleration
           }}
         />
       ))}
@@ -204,18 +256,12 @@ function App() {
     setWorkflowStatus("IN_PROGRESS");
     setFormSubmitted(true);
 
-    const requestId = crypto.randomUUID();
-
     try {
-      const res = await startSupportWorkflow({
+      const res = await submitSupportRequest({
         customerName,
         email,
-        devEmail: "hariharan.pappannan@gwcdata.ai",
         usecase,
-        requestId,
       });
-
-      const workflowInstanceId = res.id;
 
       const submittedData = {
         name: customerName,
@@ -228,20 +274,14 @@ function App() {
       setUsecase("");
       setErrors({});
 
-      await waitForWorkflowCompletion(workflowInstanceId);
-
-      const doc = await getSupportTicket(requestId);
-
-      const agentResult = doc?.content?.agentResult;
-
       setWorkflowStatus("COMPLETED");
 
       setResult({
         ...submittedData,
         status: "COMPLETED",
-        agentResult,
+        agentResult: res.agentResult,
         message:
-          "Thank you for your submission! We've sent the AI analysis results to your email. Our team will review it and contact you soon with personalized recommendations.",
+          "Thank you for your submission. The AI analysis has been sent to your email. Our team will review it and contact you soon.",
       });
 
       setShowPopup(true);
@@ -256,7 +296,7 @@ function App() {
         usecase,
         status: "FAILED",
         agentResult: "AI analysis failed.",
-        message: "Something went wrong. Our team will contact you shortly.",
+        message: "Something went wrong. Please try again.",
       });
 
       setShowPopup(true);
@@ -646,190 +686,197 @@ function App() {
       {/* Modal/Popup */}
       {showPopup && result && (
         <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full mx-auto shadow-2xl transform animate-slideUp border border-gray-100 max-h-[90vh] overflow-y-auto relative">
-            {/* Bottom Corner Paper Burst - Only show for completed status */}
-            {result.status === "COMPLETED" && <CelebrationBlast />}
-
-            {/* Header */}
-            <div className="relative sticky top-0 bg-white rounded-t-2xl z-10">
-              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#FBBF24] via-[#F97316] to-[#1E3A8A] rounded-t-2xl"></div>
-              <div className="p-5 pb-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div
-                      className={`w-14 h-14 rounded-lg flex items-center justify-center shadow-lg relative overflow-hidden ${
-                        result.status === "COMPLETED"
-                          ? "bg-gradient-to-br from-green-500 to-green-600"
-                          : "bg-gradient-to-br from-[#1E3A8A] to-[#0A1E3C]"
-                      }`}>
-                      <span className="text-3xl relative z-10">
-                        {result.status === "COMPLETED" ? "🎉" : "✓"}
-                      </span>
-                      {result.status === "COMPLETED" && (
-                        <>
-                          <div className="absolute inset-0 animate-ping bg-white opacity-30 rounded-lg"></div>
-                          <div className="absolute -inset-2 bg-yellow-300 opacity-20 blur-xl animate-pulse"></div>
-                        </>
-                      )}
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-[#0A1E3C]">
-                        {result.status === "COMPLETED"
-                          ? "Analysis Completed!"
-                          : "Request Received!"}
-                      </h2>
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleClosePopup}
-                    className="text-gray-400 hover:text-gray-600 transition-colors w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-lg">
-                    ✕
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="px-5 pb-5">
-              {/* Details Card */}
-              <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 mb-4 border border-gray-200 shadow-sm">
-                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center">
-                  <span className="w-1 h-3 bg-[#FBBF24] rounded-full mr-1.5"></span>
-                  Submission Details
-                </h3>
-
-                <div className="space-y-3">
-                  <div className="flex items-start">
-                    <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
-                      <span className="text-[#1E3A8A] mr-1.5 text-sm">👤</span>
-                      <span>Name:</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="bg-white rounded-lg px-3 py-1.5 border border-gray-100 text-gray-900 text-sm">
-                        {result.name}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
-                      <span className="text-[#1E3A8A] mr-1.5 text-sm">📧</span>
-                      <span>Email:</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="bg-white rounded-lg px-3 py-1.5 border border-gray-100 text-gray-900 text-sm break-all">
-                        {result.email}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="w-20 flex items-center text-gray-500 font-medium text-sm pt-1">
-                      <span className="text-[#1E3A8A] mr-1.5 text-sm">📋</span>
-                      <span>Use Case:</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="bg-white rounded-lg px-3 py-2 border border-gray-100 text-gray-800 text-sm max-h-24 overflow-y-auto">
-                        <p className="leading-relaxed">{result.usecase}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center">
-                    <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
-                      <span className="text-[#1E3A8A] mr-1.5 text-sm">⚡</span>
-                      <span>Status:</span>
-                    </div>
-                    <div className="flex-1">
-                      <span
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+          {/* Popup container with overflow-hidden to contain confetti */}
+          <div className="bg-white rounded-2xl max-w-2xl w-full mx-auto shadow-2xl transform animate-slideUp border border-gray-100 max-h-[90vh] overflow-hidden relative">
+            
+            {/* Scrollable content area */}
+            <div className="overflow-y-auto max-h-[90vh] relative z-10">
+              {/* Header */}
+              <div className="relative sticky top-0 bg-white rounded-t-2xl z-10">
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#FBBF24] via-[#F97316] to-[#1E3A8A] rounded-t-2xl"></div>
+                <div className="p-5 pb-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div
+                        className={`w-14 h-14 rounded-lg flex items-center justify-center shadow-lg relative overflow-hidden ${
                           result.status === "COMPLETED"
-                            ? "bg-green-100 text-green-800 border border-green-200"
-                            : "bg-[#FBBF24]/20 text-[#0A1E3C] border border-[#FBBF24]/30"
+                            ? "bg-gradient-to-br from-green-500 to-green-600"
+                            : "bg-gradient-to-br from-[#1E3A8A] to-[#0A1E3C]"
                         }`}>
-                        <span
-                          className={`w-1.5 h-1.5 rounded-full mr-1.5 bg-green-500 animate-pulse `}></span>
-                        OPEN
-                      </span>
+                        <span className="text-3xl relative z-10">
+                          {result.status === "COMPLETED" ? "🎉" : "✓"}
+                        </span>
+                        {result.status === "COMPLETED" && (
+                          <>
+                            <div className="absolute inset-0 animate-ping bg-white opacity-30 rounded-lg"></div>
+                            <div className="absolute -inset-2 bg-yellow-300 opacity-20 blur-xl animate-pulse"></div>
+                          </>
+                        )}
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold text-[#0A1E3C]">
+                          {result.status === "COMPLETED"
+                            ? "Analysis Completed!"
+                            : "Request Received!"}
+                        </h2>
+                      </div>
                     </div>
+                    <button
+                      onClick={handleClosePopup}
+                      className="text-gray-400 hover:text-gray-600 transition-colors w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-lg">
+                      ✕
+                    </button>
                   </div>
                 </div>
               </div>
 
-              {/* AI Agent Result Card */}
-              {result.agentResult && (
-                <div className="bg-gradient-to-br from-[#1E3A8A]/5 to-[#0A1E3C]/5 rounded-xl p-4 mb-4 border-l-4 border-[#FBBF24]">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-8 h-8 bg-[#1E3A8A] rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-white text-sm">🤖</span>
+              {/* Content */}
+              <div className="px-5 pb-5">
+                {/* Details Card */}
+                <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 mb-4 border border-gray-200 shadow-sm">
+                  <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center">
+                    <span className="w-1 h-3 bg-[#FBBF24] rounded-full mr-1.5"></span>
+                    Submission Details
+                  </h3>
+
+                  <div className="space-y-3">
+                    <div className="flex items-start">
+                      <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
+                        <span className="text-[#1E3A8A] mr-1.5 text-sm">👤</span>
+                        <span>Name:</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="bg-white rounded-lg px-3 py-1.5 border border-gray-100 text-gray-900 text-sm">
+                          {result.name}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-[#0A1E3C] text-sm mb-2 flex items-center">
-                        AI Agent Analysis
+
+                    <div className="flex items-start">
+                      <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
+                        <span className="text-[#1E3A8A] mr-1.5 text-sm">📧</span>
+                        <span>Email:</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="bg-white rounded-lg px-3 py-1.5 border border-gray-100 text-gray-900 text-sm break-all">
+                          {result.email}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start">
+                      <div className="w-20 flex items-center text-gray-500 font-medium text-sm pt-1">
+                        <span className="text-[#1E3A8A] mr-1.5 text-sm">📋</span>
+                        <span>Use Case:</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="bg-white rounded-lg px-3 py-2 border border-gray-100 text-gray-800 text-sm max-h-24 overflow-y-auto">
+                          <p className="leading-relaxed">{result.usecase}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center">
+                      <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
+                        <span className="text-[#1E3A8A] mr-1.5 text-sm">⚡</span>
+                        <span>Status:</span>
+                      </div>
+                      <div className="flex-1">
                         <span
-                          className={`ml-2 px-2 py-0.5 text-[10px] rounded-full border ${
+                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
                             result.status === "COMPLETED"
-                              ? "bg-green-100 text-green-800 border-green-200"
-                              : "bg-[#FBBF24]/20 text-[#0A1E3C] border-[#FBBF24]/30"
+                              ? "bg-green-100 text-green-800 border border-green-200"
+                              : "bg-[#FBBF24]/20 text-[#0A1E3C] border border-[#FBBF24]/30"
                           }`}>
-                          {result.status === "COMPLETED"
-                            ? "COMPLETED"
-                            : "PROCESSING"}
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
+                              result.status === "COMPLETED" ? "bg-green-500 animate-pulse" : "bg-[#FBBF24]"
+                            }`}></span>
+                          OPEN
                         </span>
-                      </h4>
-                      <div className="bg-white rounded-lg p-3 border border-[#FBBF24]/20 shadow-sm">
-                        <div className="text-sm text-gray-700 space-y-1">
-                          {Array.isArray(result.agentResult) ? (
-                            <ul className="list-disc pl-4 space-y-1">
-                              {result.agentResult.map((item, i) => (
-                                <li key={i}>{item}</li>
-                              ))}
-                            </ul>
-                          ) : typeof result.agentResult === "object" ? (
-                            <div className="space-y-2">
-                              {Object.entries(result.agentResult).map(
-                                ([key, value]) => (
-                                  <div
-                                    key={key}
-                                    className="border-b border-gray-100 pb-1 last:border-0">
-                                    <span className="font-medium text-[#1E3A8A] capitalize">
-                                      {key}:
-                                    </span>{" "}
-                                    <span>
-                                      {typeof value === "object"
-                                        ? JSON.stringify(value)
-                                        : value}
-                                    </span>
-                                  </div>
-                                ),
-                              )}
-                            </div>
-                          ) : (
-                            <p className="whitespace-pre-wrap">
-                              {result.agentResult}
-                            </p>
-                          )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* AI Agent Result Card */}
+                {result.agentResult && (
+                  <div className="bg-gradient-to-br from-[#1E3A8A]/5 to-[#0A1E3C]/5 rounded-xl p-4 mb-4 border-l-4 border-[#FBBF24]">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-8 h-8 bg-[#1E3A8A] rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-white text-sm">🤖</span>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-[#0A1E3C] text-sm mb-2 flex items-center">
+                          AI Agent Analysis
+                          <span
+                            className={`ml-2 px-2 py-0.5 text-[10px] rounded-full border ${
+                              result.status === "COMPLETED"
+                                ? "bg-green-100 text-green-800 border-green-200"
+                                : "bg-[#FBBF24]/20 text-[#0A1E3C] border-[#FBBF24]/30"
+                            }`}>
+                            {result.status === "COMPLETED"
+                              ? "COMPLETED"
+                              : "PROCESSING"}
+                          </span>
+                        </h4>
+                        <div className="bg-white rounded-lg p-3 border border-[#FBBF24]/20 shadow-sm">
+                          <div className="text-sm text-gray-700 space-y-1">
+                            {Array.isArray(result.agentResult) ? (
+                              <ul className="list-disc pl-4 space-y-1">
+                                {result.agentResult.map((item, i) => (
+                                  <li key={i}>{item}</li>
+                                ))}
+                              </ul>
+                            ) : typeof result.agentResult === "object" ? (
+                              <div className="space-y-2">
+                                {Object.entries(result.agentResult).map(
+                                  ([key, value]) => (
+                                    <div
+                                      key={key}
+                                      className="border-b border-gray-100 pb-1 last:border-0">
+                                      <span className="font-medium text-[#1E3A8A] capitalize">
+                                        {key}:
+                                      </span>{" "}
+                                      <span>
+                                        {typeof value === "object"
+                                          ? JSON.stringify(value)
+                                          : value}
+                                      </span>
+                                    </div>
+                                  ),
+                                )}
+                              </div>
+                            ) : (
+                              <p className="whitespace-pre-wrap">
+                                {result.agentResult}
+                              </p>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Message Card */}
-              <div className="bg-gradient-to-br from-[#1E3A8A]/5 to-[#0A1E3C]/5 rounded-xl p-4 mb-4 border-l-4 border-[#FBBF24]">
-                <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-[#1E3A8A] rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-white text-sm">📧</span>
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-700 leading-relaxed">
-                      {result.message}
-                    </p>
+                {/* Message Card */}
+                <div className="bg-gradient-to-br from-[#1E3A8A]/5 to-[#0A1E3C]/5 rounded-xl p-4 mb-4 border-l-4 border-[#FBBF24]">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-8 h-8 bg-[#1E3A8A] rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-white text-sm">📧</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-700 leading-relaxed">
+                        {result.message}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* Confetti Party Popper - Now contained by overflow-hidden on parent */}
+            {result.status === "COMPLETED" && <ConfettiPartyPopper />}
           </div>
         </div>
       )}
