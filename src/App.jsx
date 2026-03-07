@@ -549,14 +549,14 @@ function App() {
 
               {/* Form Fields */}
               <div className="space-y-5">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Name Field */}
                   <div>
                     <label className="block text-sm font-medium text-[#0A1E3C] mb-1.5">
                       Full Name <span className="text-[#FBBF24]">*</span>
                     </label>
                     <input
-                      placeholder="John Doe"
+                      placeholder="Enter your full name"
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
                       disabled={loading}
@@ -579,7 +579,7 @@ function App() {
                       Email <span className="text-[#FBBF24]">*</span>
                     </label>
                     <input
-                      placeholder="john@company.com"
+                      placeholder="Enter your email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={loading}
