@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import gwcLogo from "./assert/gwc-logo.png";
 import domoLogo from "./assert/domopalooza-logo.svg";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { submitSupportRequest } from "./api/supportApi";
 
 // ConfettiPartyPopper - Drop-in replacement for the existing component
@@ -224,7 +224,7 @@ function App() {
     return () => {
       if (loopTimer) clearTimeout(loopTimer);
     };
-  }, [workflowStatus, loading]);
+  }, [workflowStatus, loading, loopTimer]);
 
   const validateForm = () => {
     const newErrors = {};
