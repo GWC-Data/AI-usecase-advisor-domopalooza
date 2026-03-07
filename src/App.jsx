@@ -380,7 +380,7 @@ function App() {
       <Toaster position="top-right" />
       <div className="min-h-screen bg-[#F8FAFC]">
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 py-4">
           {/* Logos Section */}
           <div className="flex justify-between items-center mb-6 p-2 bg-white/50 backdrop-blur-sm rounded-xl border border-white/20 shadow-sm">
             <div className="flex items-center space-x-2">
