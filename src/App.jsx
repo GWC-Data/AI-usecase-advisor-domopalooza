@@ -12,11 +12,31 @@ const ConfettiPartyPopper = () => {
 
   React.useEffect(() => {
     const colors = [
-      "#FFD700", "#FF6B6B", "#4ECDC4", "#FFE66D", "#FF8C42",
-      "#A06B9A", "#FFB347", "#5F9EA0", "#FF69B4", "#00CED1",
-      "#FF1493", "#32CD32", "#FF4500", "#9370DB", "#FFDAB9",
-      "#98FB98", "#FFB6C1", "#87CEEB", "#F0E68C", "#DDA0DD",
-      "#FFF44F", "#FF3CAC", "#00F5FF", "#ADFF2F", "#FF6EC7",
+      "#FFD700",
+      "#FF6B6B",
+      "#4ECDC4",
+      "#FFE66D",
+      "#FF8C42",
+      "#A06B9A",
+      "#FFB347",
+      "#5F9EA0",
+      "#FF69B4",
+      "#00CED1",
+      "#FF1493",
+      "#32CD32",
+      "#FF4500",
+      "#9370DB",
+      "#FFDAB9",
+      "#98FB98",
+      "#FFB6C1",
+      "#87CEEB",
+      "#F0E68C",
+      "#DDA0DD",
+      "#FFF44F",
+      "#FF3CAC",
+      "#00F5FF",
+      "#ADFF2F",
+      "#FF6EC7",
     ];
 
     // Generate 180 pieces per side = 360 total for a massive blast
@@ -79,11 +99,11 @@ const ConfettiPartyPopper = () => {
           borderRadius,
           isStreamer,
           color: colors[Math.floor(Math.random() * colors.length)],
-          duration: `${Math.random() * 1.4 + 1.1}s`,       // 1.1–2.5s
-          delay: `${Math.random() * 0.35}s`,                 // slight stagger
+          duration: `${Math.random() * 1.4 + 1.1}s`, // 1.1–2.5s
+          delay: `${Math.random() * 0.35}s`, // slight stagger
           tx,
           ty,
-          finalRotation: Math.random() * 900 + 360,         // 360–1260° spin
+          finalRotation: Math.random() * 900 + 360, // 360–1260° spin
           opacity: Math.random() * 0.3 + 0.7,
         });
       }
@@ -103,8 +123,7 @@ const ConfettiPartyPopper = () => {
         pointerEvents: "none",
         overflow: "visible",
         zIndex: 9999,
-      }}
-    >
+      }}>
       <style>{`
         @keyframes cwBlast {
           0% {
@@ -206,25 +225,19 @@ function App() {
   const [errors, setErrors] = useState({});
   const [workflowStatus, setWorkflowStatus] = useState(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [loopTimer, setLoopTimer] = useState(null);
 
   // Effect to handle looping back to submit after completion (only for workflow, not popup)
   useEffect(() => {
     if (workflowStatus === "COMPLETED" && !loading) {
-      if (loopTimer) clearTimeout(loopTimer);
-
       const timer = setTimeout(() => {
         setWorkflowStatus(null);
         setFormSubmitted(false);
       }, 5000);
 
-      setLoopTimer(timer);
+      return () => clearTimeout(timer);
     }
 
-    return () => {
-      if (loopTimer) clearTimeout(loopTimer);
-    };
-  }, [workflowStatus, loading, loopTimer]);
+  }, [workflowStatus, loading]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -308,6 +321,9 @@ function App() {
   // Handle manual popup close
   const handleClosePopup = () => {
     setShowPopup(false);
+    setWorkflowStatus(null);
+    setFormSubmitted(false);
+    setResult(null);
   };
 
   // Determine which dot should blink
@@ -688,11 +704,10 @@ function App() {
         <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           {/* Popup container with overflow-hidden to contain confetti */}
           <div className="bg-white rounded-2xl max-w-2xl w-full mx-auto shadow-2xl transform animate-slideUp border border-gray-100 max-h-[90vh] overflow-hidden relative">
-            
             {/* Scrollable content area */}
             <div className="overflow-y-auto max-h-[90vh] relative z-10">
               {/* Header */}
-              <div className="relative sticky top-0 bg-white rounded-t-2xl z-10">
+              <div className="sticky top-0 bg-white rounded-t-2xl z-10">
                 <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#FBBF24] via-[#F97316] to-[#1E3A8A] rounded-t-2xl"></div>
                 <div className="p-5 pb-2">
                   <div className="flex items-center justify-between">
@@ -742,7 +757,9 @@ function App() {
                   <div className="space-y-3">
                     <div className="flex items-start">
                       <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
-                        <span className="text-[#1E3A8A] mr-1.5 text-sm">👤</span>
+                        <span className="text-[#1E3A8A] mr-1.5 text-sm">
+                          👤
+                        </span>
                         <span>Name:</span>
                       </div>
                       <div className="flex-1">
@@ -754,7 +771,9 @@ function App() {
 
                     <div className="flex items-start">
                       <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
-                        <span className="text-[#1E3A8A] mr-1.5 text-sm">📧</span>
+                        <span className="text-[#1E3A8A] mr-1.5 text-sm">
+                          📧
+                        </span>
                         <span>Email:</span>
                       </div>
                       <div className="flex-1">
@@ -766,7 +785,9 @@ function App() {
 
                     <div className="flex items-start">
                       <div className="w-20 flex items-center text-gray-500 font-medium text-sm pt-1">
-                        <span className="text-[#1E3A8A] mr-1.5 text-sm">📋</span>
+                        <span className="text-[#1E3A8A] mr-1.5 text-sm">
+                          📋
+                        </span>
                         <span>Use Case:</span>
                       </div>
                       <div className="flex-1">
@@ -778,7 +799,9 @@ function App() {
 
                     <div className="flex items-center">
                       <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
-                        <span className="text-[#1E3A8A] mr-1.5 text-sm">⚡</span>
+                        <span className="text-[#1E3A8A] mr-1.5 text-sm">
+                          ⚡
+                        </span>
                         <span>Status:</span>
                       </div>
                       <div className="flex-1">
@@ -790,7 +813,9 @@ function App() {
                           }`}>
                           <span
                             className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-                              result.status === "COMPLETED" ? "bg-green-500 animate-pulse" : "bg-[#FBBF24]"
+                              result.status === "COMPLETED"
+                                ? "bg-green-500 animate-pulse"
+                                : "bg-[#FBBF24]"
                             }`}></span>
                           OPEN
                         </span>
