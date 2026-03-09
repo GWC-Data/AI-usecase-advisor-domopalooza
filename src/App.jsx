@@ -820,7 +820,7 @@ function App() {
 
                   <div className="space-y-3">
                     <div className="flex items-start">
-                      <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
+                      <div className="w-24 flex items-center text-gray-500 font-medium text-sm">
                         <span className="text-[#1E3A8A] mr-1.5 text-sm">
                           👤
                         </span>
@@ -834,7 +834,7 @@ function App() {
                     </div>
 
                     <div className="flex items-start">
-                      <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
+                      <div className="w-24 flex items-center text-gray-500 font-medium text-sm">
                         <span className="text-[#1E3A8A] mr-1.5 text-sm">
                           📧
                         </span>
@@ -848,7 +848,7 @@ function App() {
                     </div>
 
                     <div className="flex items-start">
-                      <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
+                      <div className="w-24 flex items-center text-gray-500 font-medium text-sm">
                         <span className="text-[#1E3A8A] mr-1.5 text-sm">
                           🏢
                         </span>
@@ -862,7 +862,7 @@ function App() {
                     </div>
 
                     <div className="flex items-start">
-                      <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
+                      <div className="w-24 flex items-center text-gray-500 font-medium text-sm">
                         <span className="text-[#1E3A8A] mr-1.5 text-sm">
                           💼
                         </span>
@@ -876,7 +876,7 @@ function App() {
                     </div>
 
                     <div className="flex items-start">
-                      <div className="w-20 flex items-center text-gray-500 font-medium text-sm pt-1">
+                      <div className="w-24 flex items-center text-gray-500 font-medium text-sm">
                         <span className="text-[#1E3A8A] mr-1.5 text-sm">
                           📋
                         </span>
