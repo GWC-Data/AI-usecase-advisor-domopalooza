@@ -16,6 +16,34 @@
          "modelId": "0a8c907d-144b-4de3-9ba1-93541cd1e555",
          "parameters": [
             {
+               "name": "businessType",
+               "displayName": "businessType",
+               "subString": null,
+               "type": "text",
+               "visible": true,
+               "value": null,
+               "required": true,
+               "isList": false,
+               "children": [],
+               "nullable": false,
+               "entitySubType": null,
+               "aliasedName": "businessType"
+            },
+            {
+               "name": "companyName",
+               "displayName": "companyName",
+               "subString": null,
+               "type": "text",
+               "visible": true,
+               "value": null,
+               "required": true,
+               "isList": false,
+               "children": [],
+               "nullable": false,
+               "entitySubType": null,
+               "aliasedName": "companyName"
+            },
+            {
                "name": "customerName",
                "displayName": "customerName",
                "subString": null,
@@ -86,7 +114,7 @@
                "aliasedName": "useCase"
             }
          ],
-         "version": "1.0.1"
+         "version": "1.0.2"
       }
    ],
    "collectionsMapping": [

@@ -8,12 +8,16 @@ const API = axios.create({
 export const submitSupportRequest = async ({
   customerName,
   email,
-  usecase
+  companyName,
+  businessType,
+  usecase,
 }) => {
   const res = await API.post("/support-request", {
     customerName,
     email,
-    usecase
+    companyName,
+    businessType,
+    usecase,
   });
 
   return res.data;

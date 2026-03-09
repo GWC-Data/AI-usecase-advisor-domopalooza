@@ -225,6 +225,8 @@ function App() {
   const [errors, setErrors] = useState({});
   const [workflowStatus, setWorkflowStatus] = useState(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [companyName, setCompanyName] = useState("");
+  const [businessType, setBusinessType] = useState("");
 
   // Effect to handle looping back to submit after completion (only for workflow, not popup)
   useEffect(() => {
@@ -236,7 +238,6 @@ function App() {
 
       return () => clearTimeout(timer);
     }
-
   }, [workflowStatus, loading]);
 
   const validateForm = () => {
@@ -250,6 +251,14 @@ function App() {
       newErrors.email = "Please enter your email address";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!companyName.trim()) {
+      newErrors.companyName = "Please enter your company name";
+    }
+
+    if (!businessType.trim()) {
+      newErrors.businessType = "Please select a business type";
     }
 
     if (!usecase.trim()) {
@@ -273,18 +282,24 @@ function App() {
       const res = await submitSupportRequest({
         customerName,
         email,
+        companyName,
+        businessType,
         usecase,
       });
 
       const submittedData = {
         name: customerName,
         email,
+        companyName,
+        businessType,
         usecase,
       };
 
       setCustomerName("");
       setEmail("");
       setUsecase("");
+      setCompanyName("");
+      setBusinessType("");
       setErrors({});
 
       setWorkflowStatus("COMPLETED");
@@ -613,6 +628,55 @@ function App() {
                   </div>
                 </div>
 
+                {/* Company Name + Business Type Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Company Name */}
+                  <div>
+                    <label className="block text-sm font-medium text-[#0A1E3C] mb-1.5">
+                      Company Name <span className="text-[#FBBF24]">*</span>
+                    </label>
+                    <input
+                      placeholder="Enter your company name"
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                      disabled={loading}
+                      className={`w-full px-4 py-3 border rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 ${
+                        errors.companyName
+                          ? "border-red-300 bg-red-50 focus:ring-red-200"
+                          : "border-gray-200 hover:border-[#1E3A8A] focus:border-[#1E3A8A] focus:ring-[#1E3A8A]/20"
+                      }`}
+                    />
+                    {errors.companyName && (
+                      <p className="mt-1 text-xs text-red-600 flex items-center">
+                        <span className="mr-1">⚠️</span> {errors.companyName}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Business Type */}
+                  <div>
+                    <label className="block text-sm font-medium text-[#0A1E3C] mb-1.5">
+                      Business Type <span className="text-[#FBBF24]">*</span>
+                    </label>
+                    <input
+                      placeholder="Enter your business type"
+                      value={businessType}
+                      onChange={(e) => setBusinessType(e.target.value)}
+                      disabled={loading}
+                      className={`w-full px-4 py-3 border rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 ${
+                        errors.businessType
+                          ? "border-red-300 bg-red-50 focus:ring-red-200"
+                          : "border-gray-200 hover:border-[#1E3A8A] focus:border-[#1E3A8A] focus:ring-[#1E3A8A]/20"
+                      }`}
+                    />
+                    {errors.businessType && (
+                      <p className="mt-1 text-xs text-red-600 flex items-center">
+                        <span className="mr-1">⚠️</span> {errors.businessType}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
                 {/* Usecase Field */}
                 <div>
                   <label className="block text-sm font-medium text-[#0A1E3C] mb-1.5">
@@ -779,6 +843,34 @@ function App() {
                       <div className="flex-1">
                         <div className="bg-white rounded-lg px-3 py-1.5 border border-gray-100 text-gray-900 text-sm break-all">
                           {result.email}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start">
+                      <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
+                        <span className="text-[#1E3A8A] mr-1.5 text-sm">
+                          🏢
+                        </span>
+                        <span>Company:</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="bg-white rounded-lg px-3 py-1.5 border border-gray-100 text-gray-900 text-sm">
+                          {result.companyName}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start">
+                      <div className="w-20 flex items-center text-gray-500 font-medium text-sm">
+                        <span className="text-[#1E3A8A] mr-1.5 text-sm">
+                          💼
+                        </span>
+                        <span>Business:</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="bg-white rounded-lg px-3 py-1.5 border border-gray-100 text-gray-900 text-sm">
+                          {result.businessType}
                         </div>
                       </div>
                     </div>
