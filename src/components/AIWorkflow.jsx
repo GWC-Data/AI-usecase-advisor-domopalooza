@@ -7,9 +7,9 @@ import email from "../assert/email-icon.png";
 const AIWorkflow = () => {
   return (
     <section className="bg-white overflow-hidden px-3 sm:px-4">
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 rounded-2xl sm:rounded-3xl shadow-[0_16px_32px_-8px_rgba(0,0,0,0.1)] sm:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-gray-100">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 rounded-2xl sm:rounded-3xl border border-gray-100">
         {/* Header Box - Responsive */}
-        <div className="bg-[#F9F3FB] rounded-lg p-4 sm:p-5 md:p-6 mb-10 sm:mb-12 md:mb-16 lg:mb-20 flex items-center justify-center gap-2 sm:gap-3 md:gap-5 border border-[#F5EDFF] mt-2 text-center leading-relaxed">
+        <div className="bg-[#F9F3FB] rounded-lg p-4 sm:p-5 md:p-6 mb-10 sm:mb-12 md:mb-16 lg:mb-20 flex items-center justify-center gap-2 sm:gap-3 md:gap-5 border border-[#F5EDFF] mt-2 text-center leading-relaxed ">
           <img 
             src={robotIcon} 
             alt="AI" 
