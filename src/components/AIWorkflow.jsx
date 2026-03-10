@@ -7,7 +7,7 @@ import email from "../assert/email-icon.png";
 const AIWorkflow = () => {
   return (
     <section className="bg-white overflow-hidden px-3 sm:px-4">
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 rounded-2xl sm:rounded-3xl border border-gray-100">
+      <div className="mb-8 max-w-7xl mx-auto px-2 sm:px-4 rounded-2xl sm:rounded-3xl border border-gray-100 shadow-[0_16px_32px_-8px_rgba(0,0,0,0.1)]">
         {/* Header Box - Responsive */}
         <div className="bg-[#F9F3FB] rounded-lg p-4 sm:p-5 md:p-6 mb-10 sm:mb-12 md:mb-16 lg:mb-20 flex items-center justify-center gap-2 sm:gap-3 md:gap-5 border border-[#F5EDFF] mt-2 text-center leading-relaxed ">
           <img 
@@ -44,7 +44,7 @@ const AIWorkflow = () => {
                 Submit use case Request
               </h4>
               <div className="space-y-1">
-                <p className="text-gray-400 text-xs sm:text-sm md:text-base font-medium leading-relaxed px-2">
+                <p className="text-gray-400 text-base leading-relaxed px-2">
                   Describe your AI agent idea and share your business
                   requirements
                 </p>
@@ -64,7 +64,7 @@ const AIWorkflow = () => {
                 AI Analysis
               </h4>
               <div className="space-y-1">
-                <p className="text-gray-400 text-xs sm:text-sm md:text-base font-medium leading-relaxed px-2">
+                <p className="text-gray-400 text-base leading-relaxed px-2">
                   Our AI instantly analyzes your use case and generates insights
                 </p>
               </div>
@@ -83,7 +83,7 @@ const AIWorkflow = () => {
                 Email Sent
               </h4>
               <div className="space-y-1">
-                <p className="text-gray-400 text-xs sm:text-sm md:text-base font-medium leading-relaxed px-2">
+                <p className="text-gray-400 text-base leading-relaxed px-2">
                   Receive tailored recommendations directly in your inbox
                 </p>
               </div>

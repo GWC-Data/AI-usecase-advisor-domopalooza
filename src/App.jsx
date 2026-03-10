@@ -435,11 +435,11 @@ function App() {
               <div className="lg:w-[42%] w-full space-y-4 sm:space-y-5">
                 {/* Build your First AI Agent Box */}
                 <div className="inline-block w-full bg-gradient-to-r from-[#2E94DB]/20 sm:from-[#2E94DB]/30 to-[#7030B1]/30 sm:to-[#7030B1]/40 rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 lg:p-8 shadow-sm ">
-                  <h2 className="text-2xl sm:text-3xl font-light sm:font-bold leading-[1.2]">
+                  <h2 className="text-2xl sm:text-3xl font-light sm:font-semibold leading-[1.2]">
                     Describe Your Use Case,
                   </h2>
                   <h3
-                    className="text-2xl sm:text-3xl font-medium md:font-black mt-1 sm:mt-2 tracking-tight pb-1 pr-1
+                    className="text-2xl sm:text-3xl font-medium md:font-bold mt-1 sm:mt-2 tracking-tight pb-1 pr-1
                 bg-gradient-to-r from-[#2E94DB] to-[#7030B1] 
                 bg-clip-text text-transparent">
                     Get AI-Powered Guidance
@@ -447,7 +447,7 @@ function App() {
                 </div>
 
                 {/* Description Text */}
-                <p className="text-gray-500 text-base sm:text-lg md:text-xl md:text text-justify leading-relaxed">
+                <p className="text-gray-500 text-base leading-relaxed">
                   Share your requirement or use case with us. Our AI agent will
                   analyze your request and generate insights. Our team will
                   review the analysis and send you personalized recommendations

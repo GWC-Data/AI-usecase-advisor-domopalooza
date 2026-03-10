@@ -23,13 +23,13 @@ const HeroBanner = () => {
 
         {/* ── Header Logo Bar ── */}
         <div className="relative z-10 px-3 sm:px-6 md:px-8 lg:px-12 pt-3 sm:pt-5 md:pt-7">
-          <div className="w-full flex flex-col sm:flex-row items-center justify-between px-3 sm:px-4 md:px-6 py-3 sm:py-3 rounded-xl sm:rounded-2xl bg-white/30 sm:bg-white/40 backdrop-blur-xl border border-white/40 sm:border-white/60 shadow-sm gap-2 sm:gap-0">
+          <div className="w-full flex flex-row items-center justify-between px-3 sm:px-4 md:px-6 py-3 sm:py-3 rounded-xl sm:rounded-2xl bg-white/30 sm:bg-white/40 backdrop-blur-xl border border-white/40 sm:border-white/60 shadow-sm gap-2 sm:gap-0">
             {/* GWC Logo - Full width on mobile */}
             <div className="flex items-center justify-center w-full sm:w-auto">
               <img
                 src={gwcLogo}
                 alt="GWC DATA.AI"
-                className="w-[200px] object-contain"
+                className="md:w-[200px] w-[70%] object-contain"
               />
             </div>
 
@@ -38,24 +38,24 @@ const HeroBanner = () => {
               <img
                 src={domoLogo}
                 alt="DOMOPALOOZA"
-                className="w-[200px] object-contain"
+                className="md:w-[200px] w-[70%] object-contain"
               />
             </div>
           </div>
         </div>
 
         {/* ── Headline + Illustration Content ── */}
-        <div className="relative z-10 flex flex-col items-center justify-center px-4 sm:px-6 md:px-12 lg:px-16 pt-6 sm:pt-8 md:pt-10 pb-4 sm:pb-6">
+        <div className="relative z-10 flex flex-col items-center justify-center px-4 sm:px-6 md:px-12 lg:px-16 pt-6 sm:pt-8 md:pt-10    pb-4 sm:pb-6">
           {/* Headline Text Section - Centered for all devices */}
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-[clamp(24px,5vw,48px)] sm:text-[clamp(28px,5.5vw,52px)] md:text-[clamp(32px,6vw,56px)] lg:text-[clamp(36px,5vw,60px)] text-[#1A1A1A] font-semibold sm:font-bold md:font-extrabold leading-[1.1] tracking-tight mb-1 sm:mb-2">
-              Build your First AI Agent
+          <div className="text-center max-w-4xl mx-auto lg:mt-0 mt-5">
+            <h1 className="text-4xl lg:text-[clamp(36px,5vw,60px)] text-[#1A1A1A] font-bold md:font-[750] leading-[0.5] lg:leading-[1.1] mb-4 lg:mb-2">
+              Build your First
             </h1>
             <h1
-              className="inline-block text-[clamp(26px,5.5vw,48px)] sm:text-[clamp(30px,6vw,52px)] md:text-[clamp(34px,6.5vw,56px)] lg:text-[clamp(38px,5.5vw,60px)] font-semibold sm:font-bold md:font-extrabold tracking-normal pb-1 pr-1
-        bg-gradient-to-r from-[#2E94DB] to-[#7030B1]
-        bg-clip-text text-transparent">
-              in 10 Hours
+              className="inline-block text-4xl lg:text-[clamp(36px,5vw,60px)] text-[#1A1A1A] font-bold md:font-[750]
+                bg-gradient-to-r from-[#2E94DB] to-[#7030B1]
+                bg-clip-text text-transparent lg:mt-2 lg:pb-4 lg:pr-2">
+              AI Agent in 10 Hours
             </h1>
           </div>
         </div>
